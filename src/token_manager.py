@@ -1,20 +1,24 @@
 import urllib.request
 import json
-import pprint
+from config import Config
+
 
 class TokenManager:
-    @staticmethod
-    def fetch_token():
-        obj = { 'APIPassword': 'testtest' }
+    def __init__(self, config):
+        self.config = config
+
+    def fetch_token(self):
+        obj = {'APIPassword': self.config['APIPassword']}
         json_data = json.dumps(obj).encode('utf8')
 
-        url = 'http://localhost:18081/kabusapi/token'
+        url = f"{self.config['URL']}token"
         req = urllib.request.Request(url, json_data, method='POST')
         req.add_header('Content-Type', 'application/json')
 
         try:
             with urllib.request.urlopen(req) as res:
                 content = json.loads(res.read())
+                print(content['Token'])
                 return content['Token']
         except urllib.error.HTTPError as e:
             content = json.loads(e.read())
@@ -23,7 +27,3 @@ class TokenManager:
             print(e)
 
         return None
-
-
-if __name__ == '__main__':
-    print(TokenManager.fetch_token())
