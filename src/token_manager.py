@@ -18,7 +18,7 @@ class TokenManager:
         try:
             with urllib.request.urlopen(req) as res:
                 content = json.loads(res.read())
-                print(content['Token'])
+                # print(content['Token'])
                 return content['Token']
         except urllib.error.HTTPError as e:
             content = json.loads(e.read())
