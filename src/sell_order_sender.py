@@ -2,6 +2,7 @@ import os
 import urllib.request
 import json
 import pprint
+from src.order_constants import OrderConstants
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,15 +21,15 @@ class SellOrderSender:
             'Symbol': os.getenv('NT'),
             'Exchange': 1,
             'SecurityType': 1,
-            'Side': '1',
-            'CashMargin': 1,
-            'DelivType': 0,
-            'FundType': '  ',
-            'AccountType': 4,
+            'Side': OrderConstants.SELL,
+            'CashMargin': OrderConstants.CASH,
+            'DelivType': OrderConstants.PHYSICAL_SELL,
+            'FundType': OrderConstants.PHYSICAL,
+            'AccountType': OrderConstants.SPECIFIC,
             'Qty': 100,
             'FrontOrderType': 20,
             'Price': 1380,
-            'ExpireDay': 0
+            'ExpireDay': OrderConstants.TODAY
         }
 
     def send_order(self):

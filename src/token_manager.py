@@ -1,6 +1,5 @@
 import urllib.request
 import json
-from config import Config
 
 
 class TokenManager:
@@ -18,12 +17,9 @@ class TokenManager:
         try:
             with urllib.request.urlopen(req) as res:
                 content = json.loads(res.read())
-                # print(content['Token'])
                 return content['Token']
         except urllib.error.HTTPError as e:
             content = json.loads(e.read())
             print(content)
         except Exception as e:
             print(e)
-
-        return None

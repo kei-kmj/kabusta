@@ -1,34 +1,28 @@
 import urllib.request
 import json
 import pprint
-import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
-class Positions:
+class CashHolding:
+
     def __init__(self, config, token):
         self.config = config
         self.token = token
 
-    def get_positions(self):
-        url = f"{self.config['URL']}positions"
-        params = {
-            'product': '1',
-            'symbol': os.getenv('NT'),
-            'side': '2',
-            'addinfo': 'true'
-        }
-        req = urllib.request.Request('{}?{}'.format(url, urllib.parse.urlencode(params)), method='GET')
+    def get_cash(self):
 
+        url = f"{self.config['URL']}wallet/cash"
+        req = urllib.request.Request(url, method='GET')
         req.add_header('Content-Type', 'application/json')
         req.add_header('X-API-KEY', self.token)
 
         try:
             with urllib.request.urlopen(req) as res:
                 content = json.loads(res.read())
-                return content[0]['LeavesQty'] if self.config == 'ENV_PROD' else 0
+                return content['StockAccountWallet'] if self.config['env'] == 'prod' else 10000
         except urllib.error.HTTPError as e:
             print(e)
             content = json.loads(e.read())

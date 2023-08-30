@@ -2,6 +2,7 @@ import os
 import urllib.request
 import json
 import pprint
+from src.order_constants import OrderConstants
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -16,19 +17,19 @@ class BuyOrderSender:
     @property
     def order_details(self):
         return {
-            'Password': self.config['APIPassword'],
-            'Symbol': os.getenv('NT'),
+            'Password': os.getenv('ORDER_PASSWORD'),
+            'Symbol': os.getenv('HJ'),
             'Exchange': 1,
-            'SecurityType': 1,
-            'Side': '2',
-            'CashMargin': 1,
-            'DelivType': 2,
-            'FundType': '02',
-            'AccountType': 4,
+            'SecurityType': OrderConstants.STOCK,
+            'Side': OrderConstants.BUY,
+            'CashMargin': OrderConstants.CASH,
+            'DelivType': OrderConstants.DEPOSIT,
+            'FundType': OrderConstants.PROTECTION,
+            'AccountType': OrderConstants.SPECIFIC,
             'Qty': 100,
             'FrontOrderType': 20,
-            'Price': 1380,
-            'ExpireDay': 0
+            'Price': 550,
+            'ExpireDay': 20230908
         }
 
     def send_order(self):
@@ -40,12 +41,7 @@ class BuyOrderSender:
         self.set_request_headers(req)
         try:
             with urllib.request.urlopen(req) as res:
-                print(res.status, res.reason)
-                for header in res.getheaders():
-                    print(header)
-                content = json.loads(res.read())
-                pprint.pprint(content)
-                print('買い注文を出しました')
+                print(f"{self.order_details['Symbol']}の買い注文を出しました")
         except urllib.error.HTTPError as e:
             print(f"HTTPError: {e}")
             content = json.loads(e.read())
