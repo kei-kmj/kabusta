@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-class BuyOrderSender:
+class BuyExecutor:
 
     def __init__(self, config, token):
         self.config = config

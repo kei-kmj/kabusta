@@ -8,18 +8,11 @@ from src.token_manager import TokenManager
 
 def open_app():
     subprocess.Popen(
-        r"C:\Users\kei-c\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\kabu.com\kabuステーション.appref-ms",
-        shell=True)
-
-
-def close_app():
-    subprocess.Popen(["taskkill", "/IM", "kabuS.exe", "/F"])
+        r"C:\Users\kei-c\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\kabu.com\kabuステーション.appref-ms")
 
 
 def fetch_token(env):
     """Fetch and store the token based on the environment."""
-
-    print(f"{env}_token fetch start")
 
     if not is_kabuS_running():
         clear_token(env)
@@ -74,7 +67,6 @@ schedule.every().day.at("07:55").do(clear_token, 'test')
 schedule.every().day.at("07:56").do(clear_token, 'prod')
 schedule.every(10).minutes.do(fetch_token, 'test')
 schedule.every(10).minutes.do(fetch_token, 'prod')
-schedule.every().day.at("18:00").do(close_app)
 
 while True:
     schedule.run_pending()

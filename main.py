@@ -1,4 +1,4 @@
-from src.buy_order_sender import BuyOrderSender
+from src.buy_executor import BuyExecutor
 from src.sell_order_sender import SellOrderSender
 from src.stock_holding import StockHolding
 from src.cash_holding import CashHolding
@@ -23,14 +23,17 @@ if __name__ == '__main__':
     env, config = return_environment_from_args()
     token = read_token(env)
 
-    positions = StockHolding(config, token)
-    position_quantity = positions.get_positions()
+    stock_holding = StockHolding(config, token)
+    stock_count = stock_holding.get_positions()
 
-    cash = CashHolding(config, token)
-    cash_quantity = cash.get_cash()
-    print(cash_quantity)
+    cash_holding = CashHolding(config, token)
+    buying_power = cash_holding.get_cash()
+    print(buying_power)
 
-    # if position_quantity == 0:
+    buy_executor = BuyExecutor(config, token)
+    buy_executor.send_order()
+
+    # if stock_count == 0:
     #     buy_order = BuyOrderSender(config, token)
     #     buy_order.send_order()
     # else:
