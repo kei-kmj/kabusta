@@ -2,7 +2,7 @@ import urllib.request
 import json
 import pprint
 import os
-from src.order_constants import OrderConstants
+from src.api.order_constants import OrderConstants
 from dotenv import load_dotenv
 
 load_dotenv()

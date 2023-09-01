@@ -2,7 +2,7 @@ import urllib.request
 import json
 
 
-class TokenManager:
+class TokenFetcher:
     def __init__(self, config):
         self.config = config
 

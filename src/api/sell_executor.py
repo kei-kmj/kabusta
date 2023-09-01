@@ -2,13 +2,13 @@ import os
 import urllib.request
 import json
 import pprint
-from src.order_constants import OrderConstants
+from src.api.order_constants import OrderConstants
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
-class SellOrderSender:
+class SellExecutor:
 
     def __init__(self, config, token):
         self.config = config
@@ -33,7 +33,6 @@ class SellOrderSender:
         }
 
     def send_order(self):
-
         json_data = json.dumps(self.order_details).encode('utf-8')
 
         url = f"{self.config['URL']}sendorder"
@@ -41,12 +40,7 @@ class SellOrderSender:
         self.set_request_headers(req)
         try:
             with urllib.request.urlopen(req) as res:
-                print(res.status, res.reason)
-                for header in res.getheaders():
-                    print(header)
-                content = json.loads(res.read())
-                pprint.pprint(content)
-                print('売り注文を出しました')
+                print(f"{self.order_details['Symbol']}の売り注文を出しました")
         except urllib.error.HTTPError as e:
             print(f"HTTPError: {e}")
             content = json.loads(e.read())

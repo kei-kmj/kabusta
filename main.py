@@ -1,7 +1,8 @@
-from src.buy_executor import BuyExecutor
-from src.sell_order_sender import SellOrderSender
-from src.stock_holding import StockHolding
-from src.cash_holding import CashHolding
+from src.api.buy_executor import BuyExecutor
+from src.api.sell_executor import SellExecutor
+from src.api.stock_holding import StockHolding
+from src.api.cash_holding import CashHolding
+from src.util.keyring_util import KeyringUtil
 from config import Config
 import argparse
 
@@ -21,7 +22,9 @@ def read_token(env):
 
 if __name__ == '__main__':
     env, config = return_environment_from_args()
-    token = read_token(env)
+    keyring_util = KeyringUtil()
+    token = keyring_util.get_token(env)
+    # token = read_token(env)
 
     stock_holding = StockHolding(config, token)
     stock_count = stock_holding.get_positions()
@@ -30,12 +33,9 @@ if __name__ == '__main__':
     buying_power = cash_holding.get_cash()
     print(buying_power)
 
-    buy_executor = BuyExecutor(config, token)
-    buy_executor.send_order()
-
-    # if stock_count == 0:
-    #     buy_order = BuyOrderSender(config, token)
-    #     buy_order.send_order()
-    # else:
-    #     sell_order = SellOrderSender(config, token)
-    #     sell_order.send_order()
+    if stock_count == 0:
+        buy_executor = BuyExecutor(config, token)
+        buy_executor.send_order()
+    else:
+        sell_executor = SellExecutor(config, token)
+        sell_executor.send_order()
